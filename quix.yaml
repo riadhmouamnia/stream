@@ -6,23 +6,6 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Flask Web Gateway Source 2
-    application: Flask Web Gateway Source
-    version: latest
-    deploymentType: Service
-    resources:
-      cpu: 200
-      memory: 500
-      replicas: 1
-    publicAccess:
-      enabled: true
-      urlPrefix: flaskwebgatewaysource-93484d7
-    variables:
-      - name: output
-        inputType: OutputTopic
-        description: This is the output topic for hello world data
-        required: true
-        value: test
   - name: rrweb-events
     application: rrweb-events
     version: latest
