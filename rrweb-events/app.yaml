@@ -1,5 +1,4 @@
 name: rrweb-events
-name: gametelemetry-web-sockets
 language: Python
 variables:
   - name: output
