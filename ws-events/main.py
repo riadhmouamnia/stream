@@ -1,23 +1,39 @@
+import asyncio
+import websockets
 import os
 from quixstreams import Application
-
-# for local dev, load env vars from a .env file
 from dotenv import load_dotenv
+
 load_dotenv()
 
-app = Application(consumer_group="transformation-v1", auto_offset_reset="earliest")
+class webSocketSource:
+    
+    def __init__(self) -> None:
+        app = Application.Quix()
+        self._topic = app.topic(name=os.environ["output"], value_serializer='json')
+        self._producer = app.get_producer()
+        
+    # handle new websocket connections
+    async def handle_websocket(self, websocket, path):
+        async for message in websocket:
+            # Here you could handle incoming messages. This example simply broadcasts them.
+            print(str(message))
+            self._producer.produce(
+                    topic=self._topic.name,
+                    key=path.lstrip('/'),
+                    value=message)
 
-input_topic = app.topic(os.environ["input"])
-output_topic = app.topic(os.environ["output"])
+    # start the server. Listen on port 80
+    async def start_websocket_server(self):
+        print("listening for websocket connections..")
+        server = await websockets.serve(self.handle_websocket, '0.0.0.0', 80)
+        await server.wait_closed()
 
-sdf = app.dataframe(input_topic)
 
-# put transformation logic here
-# see docs for what you can do
-# https://quix.io/docs/get-started/quixtour/process-threshold.html
+# Main function to run the application
+async def main():
+    client = webSocketSource()
+    await client.start_websocket_server()
 
-sdf.print()
-sdf.to_topic(output_topic)
-
-if __name__ == "__main__":
-    app.run(sdf)
+# Run the application
+asyncio.run(main())
