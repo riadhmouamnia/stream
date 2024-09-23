@@ -1,16 +1,12 @@
 name: rrweb-events
-language: python
+name: gametelemetry-web-sockets
+language: Python
 variables:
-  - name: input
-    inputType: InputTopic
-    description: Name of the input topic to listen to.
-    defaultValue: csv-data
-    required: false
   - name: output
     inputType: OutputTopic
-    description: Name of the output topic to write to.
+    description: Output topic
     defaultValue: rrweb
-    required: false
+    required: true
 dockerfile: dockerfile
 runEntryPoint: main.py
 defaultFile: main.py
