@@ -26,5 +26,4 @@ deployments:
 
 # This section describes the Topics of the data pipeline
 topics:
-  - name: hello-world-source
   - name: test
